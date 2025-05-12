@@ -48,13 +48,67 @@ def save_tasks(tasks, filename='tasks.json'):
 
 
 if __name__ == '__main__':
+    # Load any tasks from file (JSON)
     tasks = load_tasks()
 
-    print(f"Loaded {len(tasks)} tasks.")
 
-    new_task = Task(task_id=len(tasks) + 1, name='Test Task', category='Test Category')
-    tasks.append(new_task)
+    # Command-line menu for user with 4 options 
+    while True:
+        print("\n ==== FocusHut ====")
+        print("1. View tasks")
+        print("2. Add task")
+        print("3. Mark task complete")
+        print("4. Exit")
 
-    save_tasks(tasks)
+        # Prompt user to choose an option
+        choice = input("Choose an option (1-4): ")
 
-    print("Added and saved a test task")
+        # Opt 1: view all tasks (if any) and display their status
+        if choice == '1':
+            if not tasks:
+                print("No tasks yet!")
+
+            else:
+                for task in tasks:
+                    status = "✅" if task.completed else "❌"
+
+                    print(f"[{status}] {task.id}: {task.name} ({task.category})")
+
+
+        # Opt 2: add tasks to the file 
+        elif choice == '2':
+            name = input("Enter task nae: ")
+            category = input("Enter category (optional): ")
+            task_id = max([task.id for task in tasks], default = 0) + 1
+            new_task = Task(task_id=task_id, name=name, category=category)
+            tasks.append(new_task)
+            save_tasks(tasks)
+            print(f"Tasks '{name}' added !")
+
+
+        # Opt 3: mark a task as complete if it exists
+        elif choice == '3':
+            task_id = input("Enter the ID of the task to mark complete: ")
+            found = False
+
+            for task in tasks:
+                if str(task.id) == task_id:
+                    task.completed = True
+                    save_tasks(tasks)
+                    print(f"Task '{task.name}' marked complete !")
+                    found = True
+                    break
+                
+                if not found:
+                    print("Task not found.")
+
+
+        # Opt 4: exit 
+        elif choice == '4':
+            save_tasks(tasks)
+            print("Goodbye! Tasks saved.")
+            break 
+
+        # In case of invalid input
+        else:
+            print("Invalid option. Please choose 1-4")
