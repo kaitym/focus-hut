@@ -1,39 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Tasks</h2>
-    {% if tasks %}
-        <ul>
-        {% for task in tasks %}
-            <li>
-                {{ "✅" if task.completed else "❌" }}
-                {{ task.name }} ({{ task.category }})
-                {% if not task.completed %}
-                    <a href="{{ url_for('complete_task', task_id=task.id) }}">Mark complete</a>
-                {% endif %}
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No tasks yet!</p>
-    {% endif %}
+    <h2 style="text-align: left; font-size: 2rem;">Tasks</h2>
 
-    <h3>Add Task</h3>
-    <form method="POST" action="/add">
-        <input type="text" name="name" placeholder="Task name" required>
-        <input type="text" name="category" placeholder="Category (optional)">
-        <button type="submit">Add</button>
-    </form>
-{% endblock %}
+    <div class="task-column">
+        {% if tasks %}
+            <ul>
+            {% for task in tasks %}
+                <li>
+                    {{ "✅" if task.completed else "❌" }}
+                    {{ task.name }} ({{ task.category }})
 
-<ul>
-    {% for task in tasks %}
-      <li>
-        {{ task.name }} ({{ task.category }}) - {% if task.completed %}✅{% else %}❌{% endif %}
-        <form action="{{ url_for('delete', task_id=task.id) }}" method="post" style="display:inline;">
-          <button type="submit">🗑️ Delete</button>
+                    {% if not task.completed %}
+                        <a href="{{ url_for('complete_task', task_id=task.id) }}">Mark complete</a>
+                    {% endif %}
+
+                    <!-- 🔥 Delete Button -->
+                    <form action="{{ url_for('delete', task_id=task.id) }}" method="post" style="display:inline;">
+                        <button type="submit">🗑️ Delete</button>
+                    </form>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No tasks yet!</p>
+        {% endif %}
+
+        <h3>Add Task</h3>
+        <form method="POST" action="/add">
+            <input type="text" name="name" placeholder="Task name" required>
+            <input type="text" name="category" placeholder="Category (optional)">
+            <button type="submit">Add</button>
         </form>
-      </li>
-    {% endfor %}
-  </ul>
-  
+    </div>
+{% endblock %}
