@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from focushut import Task, load_tasks, save_tasks
+from focushut import Task, load_tasks, save_tasks, delete_task
 
 app = Flask(__name__)
 
@@ -28,6 +28,16 @@ def complete_task(task_id):
             break
     save_tasks(tasks)
     return redirect('/')
+
+@app.route('/delete/<int:task_id>')
+def index():
+    tasks = load_tasks()
+    return render_template('index.html', tasks=tasks)
+
+@app.route('/delete/<int:task_id>', methods=['POST'])
+def delete(task_id):
+    delete_task(task_id)
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)

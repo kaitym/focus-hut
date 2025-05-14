@@ -25,3 +25,15 @@
         <button type="submit">Add</button>
     </form>
 {% endblock %}
+
+<ul>
+    {% for task in tasks %}
+      <li>
+        {{ task.name }} ({{ task.category }}) - {% if task.completed %}✅{% else %}❌{% endif %}
+        <form action="{{ url_for('delete', task_id=task.id) }}" method="post" style="display:inline;">
+          <button type="submit">🗑️ Delete</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+  
