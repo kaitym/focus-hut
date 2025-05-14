@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Tasks</h2>
+    {% if tasks %}
+        <ul>
+        {% for task in tasks %}
+            <li>
+                {{ "✅" if task.completed else "❌" }}
+                {{ task.name }} ({{ task.category }})
+                {% if not task.completed %}
+                    <a href="{{ url_for('complete_task', task_id=task.id) }}">Mark complete</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tasks yet!</p>
+    {% endif %}
+
+    <h3>Add Task</h3>
+    <form method="POST" action="/add">
+        <input type="text" name="name" placeholder="Task name" required>
+        <input type="text" name="category" placeholder="Category (optional)">
+        <button type="submit">Add</button>
+    </form>
+{% endblock %}
