@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from tasks import Task, load_tasks, save_tasks
+from focushut import Task, load_tasks, save_tasks
 
 app = Flask(__name__)
 
