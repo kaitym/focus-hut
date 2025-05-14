@@ -29,10 +29,6 @@ def complete_task(task_id):
     save_tasks(tasks)
     return redirect('/')
 
-@app.route('/delete/<int:task_id>')
-def index():
-    tasks = load_tasks()
-    return render_template('index.html', tasks=tasks)
 
 @app.route('/delete/<int:task_id>', methods=['POST'])
 def delete(task_id):
