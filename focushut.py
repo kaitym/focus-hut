@@ -44,6 +44,11 @@ def save_tasks(tasks, filename='tasks.json'):
     with open(filename, 'w') as f:
         json.dump([task.to_dict() for task in tasks], f, indent=4)
 
+def delete_task(task_id, filename='tasks.json'):
+    tasks = load_tasks(filename)
+    tasks = [task for task in tasks if task.id != task_id]
+    save_tasks(tasks, filename)
+
 
 
 
