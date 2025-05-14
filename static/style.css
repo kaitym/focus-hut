@@ -1,0 +1,30 @@
+/* 
+ * This is a template to begin with. 
+ * The provided code serves as a starting point for further development. 
+ * It can be customized and extended based on specific requirements. 
+ * Ensure to review and adapt the code to fit the desired functionality or design.
+ */
+ body {
+    font-family: Arial, sans-serif;
+    background-color: #f6f8fc;
+    padding: 2rem;
+    color: #333;
+}
+
+h1 {
+    color: #4a90e2;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+li {
+    margin-bottom: 0.5rem;
+}
+
+form input, form button {
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+}
