@@ -77,7 +77,7 @@ if __name__ == '__main__':
 
         # Opt 2: add tasks to the file 
         elif choice == '2':
-            name = input("Enter task nae: ")
+            name = input("Enter task name: ")
             category = input("Enter category (optional): ")
             task_id = max([task.id for task in tasks], default = 0) + 1
             new_task = Task(task_id=task_id, name=name, category=category)
