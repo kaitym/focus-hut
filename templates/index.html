@@ -11,11 +11,28 @@
                     {{ "✅" if task.completed else "❌" }}
                     {{ task.name }} ({{ task.category }})
 
+                    <!-- Elapsed Time -->
+                    {% set elapsed = task.get_elapsed() %}
+                    {% set mins = (elapsed // 60) | int %}
+                    {% set secs = (elapsed % 60) | int %}
+                    <div>⏱ {{ "%02d"|format(mins) }}:{{ "%02d"|format(secs) }}</div>
+
+                    <!-- Timer Buttons -->
+                    <form action="{{ url_for('start_timer', task_id=task.id) }}" method="post" style="display:inline;">
+                        <button type="submit">▶️ Start</button>
+                    </form>
+                    <form action="{{ url_for('stop_timer', task_id=task.id) }}" method="post" style="display:inline;">
+                        <button type="submit">⏸️ Stop</button>
+                    </form>
+                    <form action="{{ url_for('reset_timer', task_id=task.id) }}" method="post" style="display:inline;">
+                        <button type="submit">🔄 Reset</button>
+                    </form>
+
                     {% if not task.completed %}
-                        <a href="{{ url_for('complete_task', task_id=task.id) }}">Mark complete</a>
+                        <a href="{{ url_for('complete_task', task_id=task.id) }}">✅ Mark complete</a>
                     {% endif %}
 
-                    <!-- 🔥 Delete Button -->
+                    <!-- Delete Button -->
                     <form action="{{ url_for('delete', task_id=task.id) }}" method="post" style="display:inline;">
                         <button type="submit">🗑️ Delete</button>
                     </form>

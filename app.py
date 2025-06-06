@@ -37,3 +37,34 @@ def delete(task_id):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+@app.route('/start_timer/<int:task_id>', methods=['POST'])
+def start_timer(task_id):
+    tasks = load_tasks()
+    for task in tasks:
+        if task.id == task_id:
+            task.start_timer()
+            break
+    save_tasks(tasks)
+    return redirect(url_for('index'))
+
+@app.route('/stop_timer/<int:task_id>', methods=['POST'])
+def stop_timer(task_id):
+    tasks = load_tasks()
+    for task in tasks:
+        if task.id == task_id:
+            task.stop_timer()
+            break
+    save_tasks(tasks)
+    return redirect(url_for('index'))
+
+@app.route('/reset_timer/<int:task_id>', methods=['POST'])
+def reset_timer(task_id):
+    tasks = load_tasks()
+    for task in tasks:
+        if task.id == task_id:
+            task.reset_timer()
+            break
+    save_tasks(tasks)
+    return redirect(url_for('index'))
+
