@@ -1,53 +1,31 @@
-{% extends 'base.html' %}
-
-{% block content %}
-    <h2 style="text-align: left; font-size: 2rem;">Tasks</h2>
-
-    <div class="task-column">
-        {% if tasks %}
-            <ul>
-            {% for task in tasks %}
-                <li>
-                    {{ "✅" if task.completed else "❌" }}
-                    {{ task.name }} ({{ task.category }})
-
-                    <!-- Elapsed Time -->
-                    {% set elapsed = task.get_elapsed() %}
-                    {% set mins = (elapsed // 60) | int %}
-                    {% set secs = (elapsed % 60) | int %}
-                    <div>⏱ {{ "%02d"|format(mins) }}:{{ "%02d"|format(secs) }}</div>
-
-                    <!-- Timer Buttons -->
-                    <form action="{{ url_for('start_timer', task_id=task.id) }}" method="post" style="display:inline;">
-                        <button type="submit">▶️ Start</button>
-                    </form>
-                    <form action="{{ url_for('stop_timer', task_id=task.id) }}" method="post" style="display:inline;">
-                        <button type="submit">⏸️ Stop</button>
-                    </form>
-                    <form action="{{ url_for('reset_timer', task_id=task.id) }}" method="post" style="display:inline;">
-                        <button type="submit">🔄 Reset</button>
-                    </form>
-
-                    {% if not task.completed %}
-                        <a href="{{ url_for('complete_task', task_id=task.id) }}">✅ Mark complete</a>
-                    {% endif %}
-
-                    <!-- Delete Button -->
-                    <form action="{{ url_for('delete', task_id=task.id) }}" method="post" style="display:inline;">
-                        <button type="submit">🗑️ Delete</button>
-                    </form>
-                </li>
-            {% endfor %}
-            </ul>
-        {% else %}
-            <p>No tasks yet!</p>
-        {% endif %}
-
-        <h3>Add Task</h3>
-        <form method="POST" action="/add">
-            <input type="text" name="name" placeholder="Task name" required>
-            <input type="text" name="category" placeholder="Category (optional)">
-            <button type="submit">Add</button>
-        </form>
-    </div>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FocusHut</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="task-column">
+  <h1>Tasks</h1>
+  <ul>
+    <li>✅ Task 1 (Category)
+      <div>⏱ 00:10</div>
+      <button>Start</button>
+      <button>Stop</button>
+      <button>Reset</button>
+      <button>Mark complete</button>
+      <button>Delete</button>
+    </li>
+    <!-- more static tasks -->
+  </ul>
+  <h3>Add Task</h3>
+  <form>
+    <input type="text" placeholder="Task name" />
+    <input type="text" placeholder="Category (optional)" />
+    <button>Add</button>
+  </form>
+</div>
+</body>
+</html>
