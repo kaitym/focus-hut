@@ -29,14 +29,10 @@ def complete_task(task_id):
     save_tasks(tasks)
     return redirect('/')
 
-
 @app.route('/delete/<int:task_id>', methods=['POST'])
 def delete(task_id):
     delete_task(task_id)
     return redirect(url_for('index'))
-
-if __name__ == '__main__':
-    app.run(debug=True)
 
 @app.route('/start_timer/<int:task_id>', methods=['POST'])
 def start_timer(task_id):
@@ -68,3 +64,5 @@ def reset_timer(task_id):
     save_tasks(tasks)
     return redirect(url_for('index'))
 
+if __name__ == '__main__':
+    app.run(debug=True)
