@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>FocusHut</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -12,5 +11,52 @@
     <main>
         {% block content %}{% endblock %}
     </main>
+
+    <script>
+    let countdownInterval;
+    let remainingSeconds = 0;
+
+    function updateDisplay(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      document.getElementById('countdown-display').textContent =
+        `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+    }
+
+    function startCountdown() {
+      if (countdownInterval) return; // prevent multiple timers
+
+      const mins = parseInt(document.getElementById('countdown-minutes').value) || 0;
+      const secs = parseInt(document.getElementById('countdown-seconds').value) || 0;
+      remainingSeconds = mins * 60 + secs;
+
+      if (remainingSeconds <= 0) return alert("Please set a time > 0");
+
+      updateDisplay(remainingSeconds);
+
+      countdownInterval = setInterval(() => {
+        remainingSeconds--;
+        updateDisplay(remainingSeconds);
+        if (remainingSeconds <= 0) {
+          clearInterval(countdownInterval);
+          countdownInterval = null;
+          alert("Time's up!");
+        }
+      }, 1000);
+    }
+
+    function stopCountdown() {
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+      }
+    }
+
+    function resetCountdown() {
+      stopCountdown();
+      remainingSeconds = 0;
+      updateDisplay(remainingSeconds);
+    }
+    </script>
 </body>
 </html>
