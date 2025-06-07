@@ -1,50 +1,70 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<h2>Tasks</h2>
+<div class="page-container">
 
-<div class="task-column">
-    {% if tasks %}
-    <ul>
+  <!-- Tasks and Add Task (LEFT) -->
+  <div class="task-columns">
+    <div class="task-column">
+      <h2>Tasks</h2>
+      {% if tasks %}
+      <ul>
         {% for task in tasks %}
         <li>
-            {{ "✅" if task.completed else "❌" }} {{ task.name }} ({{ task.category }})
-            {% set elapsed = task.get_elapsed() %}
-            {% set mins = (elapsed // 60) | int %}
-            {% set secs = (elapsed % 60) | int %}
-            ⏱ {{ "%02d"|format(mins) }}:{{ "%02d"|format(secs) }}
-
-            {% if not task.completed %}
-            <a href="{{ url_for('complete_task', task_id=task.id) }}">✅ Mark complete</a>
-            {% endif %}
-
-            <!-- Timer control buttons -->
-            <form action="{{ url_for('start_timer', task_id=task.id) }}" method="post" style="display:inline;">
-                <button type="submit">▶️ Start</button>
+          {{ "✅" if task.completed else "❌" }} <strong>{{ task.name }}</strong> ({{ task.category }})
+          {% set elapsed = task.get_elapsed() %}
+          {% set mins = (elapsed // 60) | int %}
+          {% set secs = (elapsed % 60) | int %}
+          <div class="elapsed-time">⏱ {{ "%02d"|format(mins) }}:{{ "%02d"|format(secs) }}</div>
+          {% if not task.completed %}
+          <a href="{{ url_for('complete_task', task_id=task.id) }}">✅ Mark complete</a>
+          {% endif %}
+          <div class="timer-controls">
+            <form action="{{ url_for('start_timer', task_id=task.id) }}" method="post">
+              <button type="submit">▶️ Start</button>
             </form>
-            <form action="{{ url_for('stop_timer', task_id=task.id) }}" method="post" style="display:inline;">
-                <button type="submit">⏸️ Stop</button>
+            <form action="{{ url_for('stop_timer', task_id=task.id) }}" method="post">
+              <button type="submit">⏸️ Stop</button>
             </form>
-            <form action="{{ url_for('reset_timer', task_id=task.id) }}" method="post" style="display:inline;">
-                <button type="submit">🔄 Reset</button>
+            <form action="{{ url_for('reset_timer', task_id=task.id) }}" method="post">
+              <button type="submit">🔄 Reset</button>
             </form>
-
-            <!-- Delete button -->
-            <form action="{{ url_for('delete', task_id=task.id) }}" method="post" style="display:inline;">
-                <button type="submit">🗑️ Delete</button>
+            <form action="{{ url_for('delete', task_id=task.id) }}" method="post">
+              <button type="submit">🗑️ Delete</button>
             </form>
+          </div>
         </li>
         {% endfor %}
-    </ul>
-    {% else %}
-    <p>No tasks yet!</p>
-    {% endif %}
+      </ul>
+      {% else %}
+      <p>No tasks yet!</p>
+      {% endif %}
+    </div>
 
-    <h3>Add Task</h3>
-    <form method="POST" action="{{ url_for('add_task') }}">
-        <input type="text" name="name" placeholder="Task name" required>
-        <input type="text" name="category" placeholder="Category (optional)">
+    <div class="add-task-column">
+      <h3>Add Task</h3>
+      <form method="POST" action="{{ url_for('add_task') }}">
+        <input type="text" name="name" placeholder="Task name" required><br>
+        <input type="text" name="category" placeholder="Category (optional)"><br>
         <button type="submit">Add</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Quick Notes (RIGHT) -->
+  <div class="notes-column">
+    <h2>📝 Quick Notes</h2>
+    <form method="POST" action="{{ url_for('notes') }}">
+      <textarea name="note" rows="6" style="width: 100%; font-family:monospace;"></textarea><br>
+      <button type="submit">Save Note</button>
     </form>
+
+    {% if content %}
+    <h3>Note Archive</h3>
+    <pre style="white-space: pre-wrap; font-family:monospace;">{{ content }}</pre>
+    {% else %}
+    <p>No notes yet.</p>
+    {% endif %}
+  </div>
+
 </div>
 {% endblock %}

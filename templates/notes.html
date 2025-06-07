@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-container">
+  <div class="right-column">
+    <h2>📝 Quick Notes</h2>
+    <form method="POST" action="{{ url_for('notes') }}">
+      <textarea name="note" rows="8" style="width: 100%; font-family:monospace;"></textarea><br>
+      <button type="submit">Save Note</button>
+    </form>
+    {% if content %}
+    <h3>Note Archive</h3>
+    <pre style="white-space: pre-wrap; font-family:monospace;">{{ content }}</pre>
+    {% else %}
+    <p>No notes yet.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,12 +1,19 @@
 from flask import Flask, render_template, request, redirect, url_for
-from focushut import Task, load_tasks, save_tasks, delete_task
+from fhut import Task, load_tasks, save_tasks, delete_task
+import os
+from datetime import datetime
 
 app = Flask(__name__)
+NOTES_FILE = 'global_notes.txt'
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     tasks = load_tasks()
-    return render_template('index.html', tasks=tasks)
+    notes_content = ''
+    if os.path.exists(NOTES_FILE):
+        with open(NOTES_FILE, 'r') as f:
+            notes_content = f.read()
+    return render_template('index.html', tasks=tasks, content=notes_content)
 
 @app.route('/add', methods=['POST'])
 def add_task():
@@ -17,7 +24,7 @@ def add_task():
     new_task = Task(task_id, name, category)
     tasks.append(new_task)
     save_tasks(tasks)
-    return redirect('/')
+    return redirect(url_for('index'))
 
 @app.route('/complete/<int:task_id>')
 def complete_task(task_id):
@@ -27,7 +34,7 @@ def complete_task(task_id):
             task.completed = True
             break
     save_tasks(tasks)
-    return redirect('/')
+    return redirect(url_for('index'))
 
 @app.route('/delete/<int:task_id>', methods=['POST'])
 def delete(task_id):
@@ -62,6 +69,15 @@ def reset_timer(task_id):
             task.reset_timer()
             break
     save_tasks(tasks)
+    return redirect(url_for('index'))
+
+@app.route('/notes', methods=['POST'])
+def notes():
+    note = request.form['note'].strip()
+    if note:
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        with open(NOTES_FILE, 'a') as f:
+            f.write(f"\n--- {timestamp} ---\n{note}\n")
     return redirect(url_for('index'))
 
 if __name__ == '__main__':

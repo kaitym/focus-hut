@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-container">
+  <div class="right-column" style="width: 100%;">
+    <h2>📝 Notes for Task #{{ task_id }}</h2>
+
+    <form method="POST" action="{{ url_for('task_notes', task_id=task_id) }}">
+      <textarea name="task_note" rows="8" style="width: 100%; font-family:monospace;"></textarea><br>
+      <button type="submit">Save Note</button>
+    </form>
+
+    {% if content %}
+    <h3>Note Archive</h3>
+    <pre style="white-space: pre-wrap; font-family:monospace;">{{ content }}</pre>
+    {% else %}
+    <p>No notes yet for this task.</p>
+    {% endif %}
+
+    <p><a href="{{ url_for('index') }}">⬅️ Back to Tasks</a></p>
+  </div>
+</div>
+{% endblock %}
